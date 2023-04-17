@@ -1,87 +1,68 @@
-package password;
+package application;
 
 import java.util.concurrent.ThreadLocalRandom;
 
 
 public class PasswordChecker {
-
-	public static void main(String[] args) {
-		
-		String password = generateString();
-		
-		System.out.println(checkPassword(password));
-		
-	}
 	
-	public static int checkPassword(String password) {
-		int pasStrenght = 0;
-		Character charaObj;
-		Boolean hasUpper = false;
-		Boolean hasSpecial = false, hasSpace = false;
 		
-		if(password.length()>5) {
-			pasStrenght++;
-			
-		}
-		for( int i = 0; i < password.length(); i++) {
-			
-			charaObj = password.charAt(i);
-			
-			if(charaObj.toString().equals(" ")) {
-				hasSpace = true;
-			}
-			
-			try {
-				Integer.parseInt(charaObj.toString());	
-				
-			} catch (Exception e) {
-				if( charaObj.toString().equals(charaObj.toString().toUpperCase()) ) {
-					hasUpper = true;
-				}
-			}
-			
-			switch(charaObj.toString()) {
-			case "!":
-			case "@":
-			case "#":
-			case "%":
-			case "$":
-			case "¨":
-			case "&":
-			case "*":
-			case "(":
-			case ")":
-			case "}":
-			case "{":
-			case "]":
-			case "[":
-				hasSpecial = true;
-			}
-			
-			
-		}
-
-		
-		if(hasUpper) {
-			pasStrenght++;
-		}
-		if(hasSpecial) {
-			pasStrenght++;
-		}
-		if(hasSpace) {
-			System.out.println("It has space!");
-		}
-		
-		return pasStrenght;
-	}
-	
-	public static String generateString() {
-		
+	public static String generateString(boolean letra, boolean num, boolean spec) {
+		int charSelector, charSelector2;
 		String newPass = "";
 		Character a;
-		for (int i = 0; i < 15; i++) {
-			a = (char)(ThreadLocalRandom.current().nextInt(0, 165 + 1));
-			newPass += a.toString();
+		 while ( newPass.length() < 15) {
+			charSelector = ThreadLocalRandom.current().nextInt(0, 4 + 1);
+			switch(charSelector) {
+			
+			case 1: 
+				a = (char)ThreadLocalRandom.current().nextInt(97, 122 + 1);
+				newPass += a.toString();
+				break;
+				
+			case 2: 
+				if(!num) {
+					break;
+				}
+				a = (char)ThreadLocalRandom.current().nextInt(48, 57 + 1);
+				newPass += a.toString();
+				break;
+				
+			case 0: 
+				if(!letra) {
+					break;
+				}
+				a = (char)ThreadLocalRandom.current().nextInt(65, 90 + 1);
+				newPass += a.toString();
+				break;
+			
+			case 3: 
+				if(!spec) {
+					break;
+				}
+				charSelector2 = ThreadLocalRandom.current().nextInt(0, 3 + 1);
+				switch(charSelector2) {
+				case 0:
+					a = 34;
+					while((a == 34) || (a == 39) || (a == 44) || (a == 46) || (a == 22)) {
+						a = (char)ThreadLocalRandom.current().nextInt(33, 47 + 1);
+						newPass += a.toString();
+						break;
+					}
+					
+				case 1:
+					a = (char)ThreadLocalRandom.current().nextInt(58, 64 + 1);
+					newPass += a.toString();
+					break;
+				case 2:
+					a = (char)ThreadLocalRandom.current().nextInt(91, 95 + 1);
+					newPass += a.toString();
+					break;
+				case 3:
+					a = (char)ThreadLocalRandom.current().nextInt(123, 126 + 1);
+					newPass += a.toString();
+					break;
+				}
+			}
 		}
 		
 		return newPass;
